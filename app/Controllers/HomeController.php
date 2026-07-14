@@ -2,21 +2,19 @@
 
 namespace App\Controllers;
 
-use App\Services\UserService;
+use App\Services\TestService;
 use Core\Http\Response;
 
 class HomeController
 {
     public function __construct(
-        private UserService $service
-    ) {
-    }
-
+        private TestService $service
+    ) {}
 
     public function index(): Response
     {
         return new Response(
-            $this->service->hello()
+            $this->service->test()
         );
     }
 }

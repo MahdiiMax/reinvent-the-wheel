@@ -9,8 +9,13 @@ use ReflectionNamedType;
 
 class Container
 {
+    private array $bindings = [];
+
     public function make(string $class): object
     {
+        if (isset($this->bindings[$class])) {
+            $class = $this->bindings[$class];
+        }
         $reflection = new ReflectionClass($class);
         $constructor = $reflection->getConstructor();
         if (!$constructor) {
@@ -28,5 +33,10 @@ class Container
         }
 
         return $reflection->newInstanceArgs($dependencies);
+    }
+
+    public function bind(string $abstract, string $concrete): void
+    {
+        $this->bindings[$abstract] = $concrete;
     }
 }

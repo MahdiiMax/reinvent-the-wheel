@@ -7,6 +7,8 @@ namespace Core;
 use Core\Container\Container;
 use Core\Http\Request;
 use Core\Routing\Router;
+use Core\Database\Database;
+use Core\Database\MySQLDatabase;
 
 class Application
 {
@@ -16,6 +18,7 @@ class Application
     public function __construct()
     {
         $this->container = new Container();
+        $this->container->bind(Database::class, MySQLDatabase::class);
         $this->router = new Router($this->container);
     }
 
