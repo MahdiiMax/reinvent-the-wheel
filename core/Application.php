@@ -1,18 +1,24 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Core;
 
-use Core\Routing\Router;
+use Core\Container\Container;
 use Core\Http\Request;
+use Core\Routing\Router;
 
 class Application
 {
+    private Container $container;
     private Router $router;
 
     public function __construct()
     {
-        $this->router = new Router();
+        $this->container = new Container();
+        $this->router = new Router($this->container);
     }
+
 
     public function run(): void
     {

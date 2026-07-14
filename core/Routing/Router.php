@@ -4,15 +4,18 @@ namespace Core\Routing;
 
 use Core\Http\Request;
 
+use Core\Container\Container;
+
 class Router
 {
     private array $routes = [];
     private ControllerDispatcher $dispatcher;
 
-    public function __construct()
+    public function __construct(private readonly Container $container)
     {
-        $this->dispatcher = new ControllerDispatcher();
+        $this->dispatcher = new ControllerDispatcher($this->container);
     }
+
     public function get(string $uri, array $action): void
     {
         $this->routes[] = new Route(
