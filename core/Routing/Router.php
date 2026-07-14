@@ -2,10 +2,17 @@
 
 namespace Core\Routing;
 
+use Core\Http\Request;
+
 class Router
 {
     private array $routes = [];
+    private ControllerDispatcher $dispatcher;
 
+    public function __construct()
+    {
+        $this->dispatcher = new ControllerDispatcher();
+    }
     public function get(string $uri, array $action): void
     {
         $this->routes[] = new Route(
@@ -24,14 +31,10 @@ class Router
         );
     }
 
-    public function dispatch(): mixed
+    public function dispatch(Request $request): mixed
     {
-        $method = $_SERVER['REQUEST_METHOD'];
-
-        $uri = parse_url(
-            $_SERVER['REQUEST_URI'],
-            PHP_URL_PATH
-        );
+        $method = $request->method();
+        $uri = $request->uri();
 
         foreach ($this->routes as $route) {
 
@@ -39,17 +42,11 @@ class Router
                 $route->method() === $method &&
                 $route->uri() === $uri
             ) {
-                return $this->runRoute($route);
+                return $this->dispatcher->dispatch($route);
             }
         }
 
         http_response_code(404);
         return "404 Not Found";
-    }
-    private function runRoute(Route $route): mixed
-    {
-        [$controller, $method] = $route->action();
-        $controllerInstance = new $controller();
-        return $controllerInstance->$method();
     }
 }

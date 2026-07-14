@@ -3,11 +3,11 @@
 namespace Core;
 
 use Core\Routing\Router;
+use Core\Http\Request;
 
 class Application
 {
     private Router $router;
-
 
     public function __construct()
     {
@@ -18,6 +18,8 @@ class Application
     {
         $router = $this->router;
         require_once __DIR__ . '/../routes/web.php';
-        echo $this->router->dispatch();
+        $request = Request::capture();
+        $response = $this->router->dispatch($request);
+        $response->send();
     }
 }

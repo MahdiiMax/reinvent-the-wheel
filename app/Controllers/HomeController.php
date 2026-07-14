@@ -1,11 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controllers;
+
+use Core\Http\Response;
 
 class HomeController
 {
-    public function index()
+    public function index(): Response
     {
-        return "Hello from Home Controller";
+        return new Response('Hello from Home Controller');
     }
 }
