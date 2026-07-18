@@ -13,8 +13,8 @@ class HomeController
 
     public function index(): Response
     {
-        return new Response(
-            $this->service->test()
-        );
+        return view('home', [
+            'title' => 'Welcome to Reinvent The Wheel'
+        ]);
     }
 }
